@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Inflation keeps switching sides</title>
+  <meta name="description" content="India's rural and urban inflation story, from states today to the gap over time.">
+  <link rel="stylesheet" href="style.css?v=10">
+</head>
+<body>
+
+<div class="progress"><span id="progressFill"></span></div>
+
+<!-- ============ FIXED VISUAL STAGE ============ -->
+<div id="visualStage" class="visual-right">
+
+  <!-- ONE MAP SCENE: full India -> geometric zoom -> back out. No cross-fades. -->
+  <section class="visual-scene scene-map active" data-visual="map">
+    <div class="stage-glow glow-pink"></div>
+    <div class="visual-inner">
+      <div class="visual-caption">
+        <span id="mapKicker">2026 · COMBINED INFLATION</span>
+        <strong id="mapTitle">State snapshot</strong>
+      </div>
+
+      <div class="map-shell" id="mapShell">
+        <svg id="indiaMap" viewBox="0 0 900 760" preserveAspectRatio="xMidYMid meet"
+             aria-label="Map of India shaded by inflation" role="img">
+          <g id="mapZoom"></g>
+        </svg>
+
+        <div id="mapStatus" class="map-status">Loading the map…</div>
+
+        <!-- focus panel: fades in only when the map is zoomed into one state -->
+        <div id="zoomStat" class="zoom-stat">
+          <span id="zoomName">—</span>
+          <strong id="zoomRate">—</strong>
+          <small id="zoomBreakdown">—</small>
+        </div>
+
+        <div id="mapTooltip" class="tooltip" role="status"></div>
+
+        <div class="map-legend" id="mapLegend">
+          <span id="legendLow">LOW</span><i id="legendBar"></i><span id="legendHigh">HIGH</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATE GAP DOT PLOT -->
+  <section class="visual-scene scene-state-gap" data-visual="state-gap">
+    <div class="stage-glow glow-coral"></div>
+    <div class="chart-shell">
+      <div class="chart-head">
+        <div>
+          <span>2026 · RURAL − URBAN</span>
+          <h3>35 comparable states &amp; UTs</h3>
+        </div>
+        <div id="stateGapHover" class="chart-readout">Hover or tap a point</div>
+      </div>
+      <div class="chart-body">
+        <svg id="stateGapChart" viewBox="0 0 1060 700" preserveAspectRatio="xMidYMid meet"
+             aria-label="Rural minus urban inflation gap by state" role="img"></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- AVERAGE -->
+  <section class="visual-scene scene-average" data-visual="average">
+    <div class="stage-glow glow-purple"></div>
+    <div class="average-shell">
+      <div class="average-label">ACROSS 35 COMPARABLE STATES &amp; UTs</div>
+      <div class="average-row">
+        <span>RURAL</span><strong id="avgRural">4.27%</strong>
+        <div class="avg-track"><i class="rural-bar" id="avgRuralBar"></i></div>
+      </div>
+      <div class="average-row">
+        <span>URBAN</span><strong id="avgUrban">3.60%</strong>
+        <div class="avg-track"><i class="urban-bar" id="avgUrbanBar"></i></div>
+      </div>
+      <div class="average-gap"><span id="avgGap">0.67</span> <small>percentage points</small></div>
+    </div>
+  </section>
+
+  <!-- COMBINED HISTORY -->
+  <section class="visual-scene scene-combined-history" data-visual="combined-history">
+    <div class="stage-glow glow-yellow"></div>
+    <div class="history-page-header">STEP BACK IN TIME</div>
+    <div class="chart-shell">
+      <div class="chart-head">
+        <div>
+          <span>ALL-INDIA · COMBINED INFLATION</span>
+          <h3>2014 → 2025</h3>
+        </div>
+        <div id="combinedHistoryHover" class="chart-readout">Hover or tap a year</div>
+      </div>
+      <div class="chart-body">
+        <svg id="combinedHistoryChart" viewBox="0 0 1060 620" preserveAspectRatio="xMidYMid meet"
+             aria-label="Combined inflation 2014 to 2025" role="img"></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ANNUAL GAP -->
+  <section class="visual-scene scene-annual-gap" data-visual="annual-gap">
+    <div class="stage-glow glow-redblue"></div>
+    <div class="chart-shell">
+      <div class="chart-head">
+        <div>
+          <span>ANNUAL AVERAGE · RURAL − URBAN</span>
+          <h3>The line keeps crossing zero</h3>
+        </div>
+        <div id="annualGapHover" class="chart-readout">2014–2025</div>
+      </div>
+      <div class="chart-body">
+        <svg id="annualGapChart" viewBox="0 0 1060 620" preserveAspectRatio="xMidYMid meet"
+             aria-label="Annual rural minus urban inflation gap" role="img"></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- SWITCHES -->
+  <section class="visual-scene scene-switches" data-visual="switches">
+    <div class="stage-glow glow-switch"></div>
+    <div class="chart-shell">
+      <div class="chart-head">
+        <div>
+          <span>EVERY LEAD SWITCH · 2014–2025</span>
+          <h3>Every hand-off</h3>
+        </div>
+        <div class="switch-count"><strong id="switchCount">—</strong><small>switches</small></div>
+      </div>
+      <div class="chart-body">
+        <svg id="switchChart" viewBox="0 0 1060 560" preserveAspectRatio="xMidYMid meet"
+             aria-label="Months when rural and urban inflation swapped the lead" role="img"></svg>
+      </div>
+      <div id="switchHover" class="switch-hover">Hover or tap a dot for the month and gap.</div>
+    </div>
+  </section>
+
+  <!-- BASKET -->
+  <section class="visual-scene scene-basket" data-visual="basket">
+    <div class="stage-glow glow-orange"></div>
+    <div class="basket-shell">
+      <div class="basket-kicker">13 · OPEN THE BASKET</div>
+      <h3>Different pieces, different gaps.</h3>
+      <div class="basket-periods" role="tablist" aria-label="Period">
+        <button class="period active" type="button" data-period="2018-19">2018–19</button>
+        <button class="period" type="button" data-period="2020-21">2020–21</button>
+        <button class="period" type="button" data-period="2023-25">2023–25</button>
+        <button class="period" type="button" data-period="2025">2025</button>
+      </div>
+      <div id="basketItems" class="basket-items"></div>
+      <div id="basketDetail" class="basket-detail">Hover or tap an item to inspect the category gap.</div>
+    </div>
+  </section>
+
+  <!-- END -->
+  <section class="visual-scene scene-end" data-visual="end">
+    <div class="stage-glow glow-end"></div>
+    <div class="end-visual">
+      <div><strong id="endRural">27</strong><span>rural higher</span></div>
+      <div><strong id="endUrban">7</strong><span>urban higher</span></div>
+      <div><strong id="endEqual">1</strong><span>equal</span></div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ============ STORY RAIL ============ -->
+<main class="story">
+
+  <!-- 1 -->
+  <section class="step" data-visual="map" data-map-mode="combined" data-side="left" data-label="The map">
+    <article class="story-card">
+      <span class="eyebrow">INDIA · 2026</span>
+      <h1>Inflation isn't the same <em>everywhere.</em></h1>
+      <span class="byline">by Diyana Soni</span>
+      <p class="lede">The cost of living has moved differently across states and between rural and urban households. The gap has also changed direction over time.</p>
+      <p class="hint">Hover or tap a state to see combined, rural and urban inflation.</p>
+      <p class="source"><strong>Source:</strong> NSO, MoSPI, <em>Consumer Price Index for July 2026</em>, released Aug. 12, 2026. <a href="https://www.pib.gov.in/PressReleasePage.aspx?PRID=2298615&amp;lang=2&amp;reg=48" target="_blank" rel="noopener">Primary release</a></p>
+      <div class="scroll-cue">scroll down
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+    </article>
+  </section>
+
+  <!-- 2 -->
+  <section class="step" data-visual="map" data-map-mode="combined" data-map-focus="Telangana" data-side="left" data-label="Telangana">
+    <article class="story-card">
+      <span class="eyebrow">01 · HIGHEST COMBINED INFLATION</span>
+      <h2><em>Telangana</em> is where prices are rising fastest.</h2>
+      <p>Telangana recorded the highest combined inflation in the July 2026 state data, at <strong>6.32%</strong>. Rural inflation was <strong>6.86%</strong>, while urban inflation was <strong>5.92%</strong>. The New Indian Express reported that Telangana had recorded the highest state inflation every month since January, with economists linking part of the rise to the introduction of the new CPI series. <a href="https://www.newindianexpress.com/amp/story/states/telangana/2026/Aug/13/telangana-tops-retail-inflation-chart-for-7th-month-in-a-row" target="_blank" rel="noopener">The New Indian Express</a></p>
+      <p>In June, prices of edible oils in Hyderabad had risen by <strong>₹20–30 a litre</strong> over three months, while tomatoes and several other vegetables were selling at <strong>₹80–90 a kilogram</strong>, according to <a href="https://www.newindianexpress.com/cities/hyderabad/2026/Jun/01/iran-war-upends-household-budgets-of-hyderabadi-families-3" target="_blank" rel="noopener">The New Indian Express</a>.</p>
+      <p class="source"><strong>Source:</strong> NSO, MoSPI, <em>Consumer Price Index for July 2026</em>, released Aug. 12, 2026; Telangana context from <em>The New Indian Express</em>, June–August 2026. <a href="https://www.pib.gov.in/PressReleasePage.aspx?PRID=2298615&amp;lang=2&amp;reg=48" target="_blank" rel="noopener">Primary release</a></p>
+    </article>
+  </section>
+
+  <!-- 3 -->
+  <section class="step" data-visual="map" data-map-mode="combined" data-map-focus="Mizoram" data-side="left" data-label="Mizoram">
+    <article class="story-card">
+      <span class="eyebrow">02 · LOWEST COMBINED INFLATION</span>
+      <h2>At the other end, prices barely moved,<em> Mizoram.</em></h2>
+      <p>Mizoram recorded the lowest combined inflation in the July 2026 dataset, at <strong>1.84%</strong>. Rural inflation was <strong>2.27%</strong>, compared with <strong>1.52%</strong> in urban areas. The state had also recorded a sharp reduction in inflation earlier in the decade. Mizoram's Economic Survey 2024-25 reported combined inflation of <strong>3.29% in December 2023</strong>, down from <strong>8.41%</strong> a year earlier. <a href="https://planning.mizoram.gov.in/uploads/attachments/2025/03/552594ba7d05c4e881d830b8fe5522c9/economic-survey-2024-2025.pdf" target="_blank" rel="noopener">Economic Survey of Mizoram 2024-25</a></p>
+      <p class="source"><strong>Source:</strong> NSO, MoSPI, <em>Consumer Price Index for July 2026</em>; <em>Economic Survey of Mizoram 2024-25</em>, Government of Mizoram. <a href="https://www.pib.gov.in/PressReleasePage.aspx?PRID=2298615&amp;lang=2&amp;reg=48" target="_blank" rel="noopener">Primary release</a></p>
+    </article>
+  </section>
+
+  <!-- 4 -->
+  <section class="step" data-visual="map" data-map-mode="gap" data-side="left" data-label="Rural vs urban">
+    <article class="story-card">
+      <span class="eyebrow">03 · RURAL VS URBAN</span>
+      <h2><em>Rural</em> and <em>urban</em> prices do not move together.</h2>
+      <p>In July 2026, all-India inflation was <strong>4.45%</strong>. Rural inflation was <strong>4.84%</strong>, compared with <strong>3.96%</strong> in urban areas. Food inflation was <strong>5.79%</strong> in rural areas and <strong>5.05%</strong> in urban areas.</p>
+      <p>Across the state data, the rural-urban difference moved in both directions. The figures ranged from a <strong>1.73 percentage-point rural lead</strong> in Andaman and Nicobar Islands to a <strong>1.18 percentage-point urban lead</strong> in Himachal Pradesh.</p>
+      <p class="source"><strong>Source:</strong> NSO, MoSPI, <em>Consumer Price Index for July 2026</em>, Aug. 12, 2026; author's calculations from state-level data. <a href="https://www.pib.gov.in/PressReleasePage.aspx?PRID=2298615&amp;lang=2&amp;reg=48" target="_blank" rel="noopener">Primary release</a></p>
+      <p class="hint">Hover over a state to see its exact rural and urban rates.</p>
+    </article>
+  </section>
+
+  <!-- 5 -->
+  <section class="step" data-visual="map" data-map-mode="gap" data-map-focus="Andaman and Nicobar Islands" data-side="left" data-label="Andaman &amp; Nicobar">
+    <article class="story-card">
+      <span class="eyebrow">04 · LARGEST RURAL-OVER-URBAN GAP</span>
+      <h2>Andaman &amp; Nicobar: <em>+1.73 pp.</em></h2>
+      <p>Rural inflation in Andaman and Nicobar Islands was <strong>4.99%</strong>, compared with <strong>3.26%</strong> in urban areas, giving a gap of <strong>1.73 percentage points</strong>.</p>
+      <p>The islands' supply chain is heavily dependent on maritime cargo. The government's <strong>LEADS 2025</strong> report identifies port infrastructure and cargo movement as key parts of essential-commodity logistics in the islands. A 2026 Budget proposal for a <strong>Coastal Cargo Promotion Scheme</strong> was described as a measure expected to reduce logistics costs and stabilise prices of essential commodities brought from the mainland.</p>
+      <p class="source"><strong>Source:</strong> NSO, MoSPI, <em>Consumer Price Index for July 2026</em>; DPIIT, <em>Logistics Ease Across Different States (LEADS) 2025</em>; Andaman and Nicobar Administration, 2026 Budget-related release. <a href="https://www.pib.gov.in/PressReleasePage.aspx?PRID=2298615&amp;lang=2&amp;reg=48" target="_blank" rel="noopener">Primary release</a></p>
+    </article>
+  </section>
+
+  <!-- 6 -->
+  <section class="step" data-visual="map" data-map-mode="gap" data-map-focus="Himachal Pradesh" data-side="left" data-label="Himachal Pradesh">
+    <article class="story-card">
+      <span class="eyebrow">05 · LARGEST URBAN-OVER-RURAL GAP</span>
+      <h2>Himachal Pradesh flips it:<em> −1.18 pp.</em></h2>
+      <p>Himachal Pradesh recorded rural inflation of <strong>3.45%</strong> and urban inflation of <strong>4.63%</strong>, producing the largest urban-over-rural gap in the dataset at <strong>1.18 percentage points</strong>.</p>
+      <p>Himachal Pradesh's <strong>Economic Survey 2025-26</strong> reported that transport inflation had reached <strong>6.9%</strong> in 2025, while health inflation remained elevated. The survey identified transport and health as major contributors to inflation during the year, while housing and clothing inflation remained relatively subdued.</p>
+      <p class="source"><strong>Source:</strong> NSO, MoSPI, <em>Consumer Price Index for July 2026</em>; Government of Himachal Pradesh, <em>Economic Survey 2025-26</em>. <a href="https://www.pib.gov.in/PressReleasePage.aspx?PRID=2298615&amp;lang=2&amp;reg=48" target="_blank" rel="noopener">Primary release</a></p>
+    </article>
+  </section>
+
+  <!-- 7 -->
+  <section class="step" data-visual="map" data-map-mode="gap" data-side="left" data-label="The bounce">
+    <article class="story-card">
+      <span class="eyebrow">06 · 27 → 7 → 1</span>
+      <div class="arrow-stats"><strong>27</strong><b>→</b><strong class="blue">7</strong></div>
+      <h2>The split across <em>35 states and UTs.</em></h2>
+      <p>Of the <strong>35 states and Union Territories with both rural and urban inflation figures</strong>, <strong>27</strong> recorded higher rural inflation, <strong>7</strong> recorded higher urban inflation and <strong>1</strong> recorded equal inflation.</p>
+      <p><strong>Nagaland</strong> recorded <strong>2.82%</strong> in both rural and urban areas. <strong>Chandigarh</strong> is not included in the comparison because the July 2026 dataset has no rural inflation figure for it.</p>
+      <p class="source"><strong>Source:</strong> NSO, MoSPI, <em>Consumer Price Index for July 2026</em>; author's calculation from state-level data. <a href="https://www.pib.gov.in/PressReleasePage.aspx?PRID=2298615&amp;lang=2&amp;reg=48" target="_blank" rel="noopener">Primary release</a></p>
+    </article>
+  </section>
+
+  <!-- 8 -->
+  <section class="step" data-visual="state-gap" data-side="left" data-label="State-by-state">
+    <article class="story-card">
+      <span class="eyebrow">07 · STATE-BY-STATE GAP</span>
+      <h2>Where the numbers <em>spread out.</em></h2>
+      <p>The median rural-minus-urban gap across the <strong>35 comparable states and UTs was +0.92 percentage points</strong>.</p>
+      <p>The full range was <strong>2.91 percentage points</strong>, from <strong>−1.18 pp in Himachal Pradesh</strong> to <strong>+1.73 pp in Andaman and Nicobar Islands</strong>.</p>
+      <p class="source"><strong>Source:</strong> NSO, MoSPI, <em>Consumer Price Index for July 2026</em>; author's calculations from state-level data. <a href="https://www.pib.gov.in/PressReleasePage.aspx?PRID=2298615&amp;lang=2&amp;reg=48" target="_blank" rel="noopener">Primary release</a></p>
+      <p class="hint">Hover a dot. It bounces, and the exact state values appear above.</p>
+    </article>
+  </section>
+
+  <!-- 9 -->
+  <section class="step" data-visual="average" data-side="left" data-label="Step back">
+    <article class="story-card">
+      <span class="eyebrow">STEP BACK</span>
+      <h2>Across comparable states, rural inflation averages <em>higher.</em></h2>
+      <p>Taken together, the comparable states have average rural inflation of <strong>4.27%</strong>, against <strong>3.60%</strong> for urban areas. That is a gap of about <strong>0.67</strong> percentage points. But this is an average across states, not a measure of what the average Indian household pays. It simply captures the direction seen across the state-level observations, with substantial differences hidden underneath the two numbers.</p>
+      <div class="average-copy">
+        <span>RURAL</span><strong id="avgRuralCopy">4.27%</strong>
+        <span>URBAN</span><strong id="avgUrbanCopy">3.60%</strong>
+      </div>
+      <p class="source"><strong>Source:</strong> NSO, MoSPI, <em>Consumer Price Index for July 2026</em>; author's calculation from state-level data. <a href="https://www.pib.gov.in/PressReleasePage.aspx?PRID=2298615&amp;lang=2&amp;reg=48" target="_blank" rel="noopener">Primary release</a></p>
+    </article>
+  </section>
+
+  <!-- 10 -->
+  <section class="step" data-visual="combined-history" data-side="left" data-label="Back to 2014">
+    <article class="story-card">
+      <span class="eyebrow">08 · STEP BACK IN TIME</span>
+      <h2>Now compare the combined rate from <em>2014.</em></h2>
+      <p>Combined inflation was:</p>
+      <p><strong>2014 — 6.71%</strong><br><strong>2015 — 4.91%</strong><br><strong>2016 — 4.96%</strong><br><strong>2017 — 3.33%</strong><br><strong>2018 — 3.96%</strong><br><strong>2019 — 3.71%</strong><br><strong>2020 — 6.61%</strong><br><strong>2021 — 5.14%</strong><br><strong>2022 — 6.70%</strong><br><strong>2023 — 5.66%</strong><br><strong>2024 — 4.95%</strong><br><strong>2025 — 2.23%</strong></p>
+      <p class="source"><strong>Source:</strong> NSO, MoSPI CPI series; author's calculation of annual combined inflation from monthly data, 2014–2025.</p>
+    </article>
+  </section>
+
+  <!-- 11 -->
+  <section class="step" data-visual="annual-gap" data-gap-focus="2014" data-side="left" data-label="The gap">
+    <article class="story-card">
+      <span class="eyebrow">09 · THE GAP</span>
+      <h2>The rural–urban gap changed direction <em>21 times.</em></h2>
+      <p>The rural-minus-urban inflation gap changed sign <strong>21 times</strong> in the monthly series used for the analysis.</p>
+      <p>The gap was <strong>positive in 2016</strong>, <strong>negative in 2019</strong>, and <strong>negative again in 2025</strong>.</p>
+      <p class="source"><strong>Source:</strong> NSO, MoSPI CPI monthly series; author's calculation of the rural-minus-urban gap and monthly sign changes.</p>
+    </article>
+  </section>
+
+  <!-- 12 -->
+  <section class="step" data-visual="annual-gap" data-gap-focus="2016" data-side="left" data-label="2016">
+    <article class="story-card">
+      <span class="eyebrow">10 · 2016</span>
+      <h2>Rural pulls ahead: <em>+1.40 pp.</em></h2>
+      <p>The annual rural-minus-urban inflation gap was <strong>+1.40 percentage points in 2016</strong>.</p>
+      <p>In July 2016, all-India rural inflation was <strong>6.20%</strong>, compared with <strong>5.26%</strong> in urban areas.</p>
+      <p class="source"><strong>Source:</strong> NSO, MoSPI CPI series; author's calculation of the annual rural-urban gap. July 2016 comparison from MoSPI CPI release.</p>
+    </article>
+  </section>
+
+  <!-- 13 -->
+  <section class="step" data-visual="annual-gap" data-gap-focus="2019" data-side="left" data-label="2019">
+    <article class="story-card">
+      <span class="eyebrow">11 · 2019</span>
+      <h2>Urban takes the lead: <span class="blue-text">−1.67 pp.</span></h2>
+      <p>The annual rural-minus-urban gap was <strong>−1.67 percentage points in 2019</strong>.</p>
+      <p>By December, all-India urban headline inflation was <strong>7.46%</strong>, compared with <strong>7.26%</strong> in rural areas. The urban-rural difference was wider in food inflation: <strong>16.12% in urban areas versus 12.97% in rural areas</strong>.</p>
+      <p class="source"><strong>Source:</strong> NSO, MoSPI, CPI December 2019 release; author's calculation of the annual 2019 rural-urban gap. <a href="https://www.pib.gov.in/PressReleasePage.aspx?PRID=1599279&amp;lang=2&amp;reg=48" target="_blank" rel="noopener">December 2019 release</a></p>
+    </article>
+  </section>
+
+  <!-- 14 -->
+  <section class="step" data-visual="switches" data-side="left" data-label="2025">
+    <article class="story-card">
+      <span class="eyebrow">12 · 2025</span>
+      <h2>The gap moved back below zero: <em>−0.58 pp.</em></h2>
+      <p>The annual rural-minus-urban gap was <strong>−0.58 percentage points in 2025</strong>.</p>
+      <p>The <strong>Economic Survey 2025-26</strong>, Ministry of Finance, says rural inflation had remained above urban inflation through much of <strong>2023 and 2024</strong>, but moved below urban inflation during <strong>2025 as food inflation eased</strong>. The survey also shows rural inflation ending 2025 below urban inflation in its monthly series.</p>
+      <p class="source"><strong>Source:</strong> NSO, MoSPI CPI series; author's calculation of the 2025 annual gap. Context: Government of India, <em>Economic Survey 2025-26, Chapter 5 — Inflation: Tamed and Anchored</em>. <a href="https://www.indiabudget.gov.in/economicsurvey/doc/eschapter/echap05.pdf" target="_blank" rel="noopener">Economic Survey</a></p>
+      <p class="hint">This chart plots every month in which the lead changed hands.</p>
+    </article>
+  </section>
+
+  <!-- 15 -->
+  <section class="step" data-visual="basket" data-period="2018-19" data-side="left" data-label="Open the basket">
+    <article class="story-card">
+      <span class="eyebrow">13 · OPEN THE BASKET</span>
+      <h2>The gap moves when different parts of the basket <em>move.</em></h2>
+      <p>In <strong>2018-19</strong>, rural consumer food price inflation was <strong>2.67 percentage points lower</strong> than urban inflation.</p>
+      <p>For the broader <strong>Food &amp; Beverages</strong> group, the rural-minus-urban gap was <strong>−2.30 percentage points</strong>.</p>
+      <p>The difference shows that the rural-urban inflation gap can change even inside the food-heavy part of the CPI basket.</p>
+      <p class="source"><strong>Source:</strong> Author's analysis of NSO/MoSPI CPI subgroup data, 2018-19.</p>
+      <p class="hint">Your period choice stays put while you scroll.</p>
+    </article>
+  </section>
+
+  <!-- 16 -->
+  <section class="step" data-visual="end" data-side="left" data-label="The takeaway">
+    <article class="story-card">
+      <span class="eyebrow">THE TAKEAWAY</span>
+      <h2>The gap has moved <em>both ways.</em></h2>
+      <p>In July 2026, rural inflation was higher than urban inflation in <strong>27 of 35 comparable states and UTs</strong>. The state-level gap ranged from <strong>+1.73 percentage points</strong> to <strong>−1.18 percentage points</strong>, while the equal-weighted state average was <strong>4.27% for rural inflation and 3.62% for urban inflation</strong>.</p>
+      <p>From 2014 to 2025, combined inflation ranged from <strong>2.23% to 6.71%</strong>, while the rural-urban gap changed direction repeatedly.</p>
+      <p class="source"><strong>Source:</strong> NSO, MoSPI CPI series; author's calculations from state-level and monthly data.</p>
+    </article>
+  </section>
+
+  <footer class="footer">
+    <div>India Inflation Story · Diyana Soni · Asian College of Journalism</div>
+    <div><strong>Sources</strong></div>
+    <div><strong>Primary data:</strong> National Statistical Office, Ministry of Statistics and Programme Implementation, Government of India, <em>Consumer Price Index, July 2026, Base 2024=100</em>, released Aug. 12, 2026. <a href="https://www.pib.gov.in/PressReleasePage.aspx?PRID=2298615&amp;lang=2&amp;reg=48" target="_blank" rel="noopener">Press release</a></div>
+    <div><strong>Historical CPI data:</strong> NSO, MoSPI, Consumer Price Index series, 2014–2025; annual and rural-urban differences calculated by the author.</div>
+    <div><strong>Government context:</strong> Government of India, <em>Economic Survey 2025-26</em>, Chapter 5, “Inflation: Tamed and Anchored.” <a href="https://www.indiabudget.gov.in/economicsurvey/doc/eschapter/echap05.pdf" target="_blank" rel="noopener">Economic Survey</a></div>
+    <div><strong>State context:</strong> Government of Himachal Pradesh, <em>Economic Survey 2025-26</em>; Government of Mizoram, <em>Economic Survey 2024-25</em>.</div>
+    <div><strong>Logistics context:</strong> Department for Promotion of Industry and Internal Trade, <em>Logistics Ease Across Different States (LEADS) 2025</em>; Andaman and Nicobar Administration.</div>
+    <div><strong>Reporting context:</strong> <em>The New Indian Express</em>, June–August 2026; <em>Mint</em>, July 2026.</div>
+    <div><strong>Calculations:</strong> Rural-urban gaps, state averages, annual comparisons and monthly switch counts are the author's calculations from the underlying CPI data.</div>
+  </footer>
+
+</main>
+
+<script src="js/d3.v3.min.js"></script>
+<script src="js/app.js?v=10"></script>
+</body>
+</html>
