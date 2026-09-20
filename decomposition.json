@@ -1,0 +1,38 @@
+{
+  "2018-19": {
+    "Fuel and Light": 0.36,
+    "Consumer Food Price": -2.67,
+    "Food and Beverages": -2.3,
+    "Clothing and Footwear": -2.15,
+    "General": -1.44,
+    "Miscellaneous": 1.28,
+    "Pan, Tobacco and Intoxicants": 0.65
+  },
+  "2020-21": {
+    "Fuel and Light": -5.21,
+    "Consumer Food Price": -1.46,
+    "Food and Beverages": -0.27,
+    "Clothing and Footwear": 1.81,
+    "General": -0.83,
+    "Miscellaneous": -0.74,
+    "Pan, Tobacco and Intoxicants": -0.44
+  },
+  "2023-25": {
+    "Fuel and Light": 3.71,
+    "Consumer Food Price": -0.11,
+    "Food and Beverages": -0.27,
+    "Clothing and Footwear": -0.61,
+    "General": 0.83,
+    "Miscellaneous": -0.11,
+    "Pan, Tobacco and Intoxicants": -0.15
+  },
+  "2025": {
+    "Fuel and Light": -1.29,
+    "Consumer Food Price": -0.0,
+    "Food and Beverages": 0.05,
+    "Clothing and Footwear": -0.42,
+    "General": -0.82,
+    "Miscellaneous": -0.18,
+    "Pan, Tobacco and Intoxicants": 0.09
+  }
+}
