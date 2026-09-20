@@ -161,7 +161,7 @@
     // had no Andaman & Nicobar and no Ladakh, and spelled five states
     // differently from the CSV, so those states never coloured in and the
     // Andaman zoom step silently did nothing.
-    d3.json("data/india-states.geojson", function (err, geo) {
+   d3.json("india-states.geojson", function(err, geo) {
       if (err || !geo || !geo.features) { mapError("Could not load data/india-states.geojson"); return; }
       geoFeatures = geo.features;
       geoFeatures.forEach(function (f) { featureByName[stateName(f)] = f; });
